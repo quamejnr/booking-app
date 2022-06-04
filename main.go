@@ -5,15 +5,14 @@ import (
 	"strings" 
 )
 
+const conferenceTickets = 50
+var conferenceName = "Go conference"
+var remainingTickets uint = 50 
+var bookings = []string{}
+
 func main() {
 
-	conferenceName := "Go conference"
-	const conferenceTickets = 50
-	var remainingTickets uint = 50 
-
-	greetUser(conferenceName, conferenceTickets)
-
-	bookings := []string{}
+	greetUser()
 
 	for remainingTickets > 0{
 		var userName string
@@ -29,19 +28,19 @@ func main() {
 			fmt.Println("Number of tickets is invalid!!!")
 			continue
 		}
-		if remainingTicketsIsNotEnough(userTickets, remainingTickets) {
+		if remainingTicketsIsNotEnough(userTickets) {
 			fmt.Printf("Sorry, we only have %v tickets available.\n", remainingTickets)
 			continue
 		}
-		remainingTickets = buyTickets(remainingTickets, userTickets)
-		printBookingInfo(&bookings, userName, userTickets, remainingTickets)
+		remainingTickets = buyTickets(userTickets)
+		printBookingInfo(userName, userTickets)
 	}
 
 	fmt.Println("Sorry we're fully booked, See you next year")
 
 }
 
-func greetUser(conferenceName string, conferenceTickets int) {
+func greetUser() {
 	fmt.Printf("Welcome to %v\n", conferenceName)
 	fmt.Println("We have", conferenceTickets, "tickets")
 	fmt.Println("Grab your tickets now!!!")
@@ -70,20 +69,20 @@ func isInvalidNumber(userTickets uint) bool {
 	return userTickets < 1
 }
 
-func remainingTicketsIsNotEnough(userTickets uint, remainingTickets uint) bool {
+func remainingTicketsIsNotEnough(userTickets uint) bool {
 	return remainingTickets < userTickets
 }
 
-func buyTickets(remainingTickets uint, userTickets uint) uint {
+func buyTickets(userTickets uint) uint {
 	remainingTickets -= userTickets
 	return remainingTickets
 }
 
-func printBookingInfo(bookings *[]string, userName string, userTickets uint, remainingTickets uint) {
-	*bookings = append(*bookings, userName)
+func printBookingInfo(userName string, userTickets uint) {
+	bookings = append(bookings, userName)
 	fmt.Println("")
 	fmt.Printf("User %s has booked %v tickets.\n", userName, userTickets)
-	fmt.Println("Bookings list:", *bookings)
+	fmt.Println("Bookings list:", bookings)
 	fmt.Println("Remaining tickets:", remainingTickets)
 	fmt.Println("")		
 }
